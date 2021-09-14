@@ -8,7 +8,7 @@ import tex2pix
 from particle.converters.bimap import DirectionalMaps
 
 from ._version import version as __version__
-from .awkward import register_awkward, to_awkward
+from .awkward import register_awkward, to_awkward, to_awkward_nanoaod
 
 __all__ = [
     "__version__",
@@ -25,6 +25,7 @@ __all__ = [
     "read_num_events",
     "register_awkward",
     "to_awkward",
+    "to_awkward_nanoaod",
     "visualize",
 ]
 
