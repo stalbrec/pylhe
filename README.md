@@ -28,6 +28,13 @@ and to get the required libraries to be able to visualize events install with th
 python -m pip install pylhe[viz]
 ```
 
+
+To install from local directory (cloned repo) do:
+
+```
+pip install -e .
+```
+
 The visualization capabilities require external dependencies of [Graphviz](https://graphviz.org/) and LaTeX.
 
 ## Citation
