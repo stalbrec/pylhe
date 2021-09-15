@@ -86,7 +86,7 @@ def to_awkward_nanoaod(event_iterable):
                         builder.field("LHEReweightingWeight").append(float(v))
                         
                     
-            builder.field('GenParts')
+            builder.field('GenPart')
             with builder.list():
                 for particle in event.particles:
                     with builder.record():
