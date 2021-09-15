@@ -75,7 +75,7 @@ def to_awkward_nanoaod(event_iterable):
         with builder.record(name="Event"):
             builder.field("LHEWeight")
             with builder.record(name="LHEWeight"):
-                builder.field("originalXWGTUP").real(event.eventinfo.weight)
+                builder.field("originalXWGTUP").append(float(event.eventinfo.weight))
             
             builder.field("LHEReweightingWeight")
             with builder.list():
