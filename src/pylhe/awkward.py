@@ -72,19 +72,34 @@ def to_awkward_nanoaod(event_iterable):
     
     builder = ak.ArrayBuilder()
     for event in event_iterable:
-        with builder.list():
-            for particle in event.particles:
-                with builder.record():
-                    for fname,fattr_list in genpart_field_map.items():
-                        fattr = fattr_list[0]
-                        dtype = fattr_list[1]
-                        attr = particle
-                        for subattr_str in fattr.split('.'):
-                            if(subattr_str == 'p4'):
-                                attr = p4(particle)
-                            else:
-                                attr = getattr(attr,subattr_str)
-                            if(callable(attr)):
-                                attr = attr()
-                        builder.field(fname).append(dtype(attr))
+        with builder.record(name="Event"):
+            builder.field("LHEWeight")
+            with builder.record(name="LHEWeight"):
+                builder.field("originalXWGTUP").real(event.eventinfo.weight)
+            
+            builder.field("LHEReweightingWeight")
+            with builder.list():
+                for k,v in event.weights.items():
+                    with builder.record():
+                        #don't store ids for now, since uproot won't save anyhting else than numpy dataypes (have to figure out how to convert it here or later.)
+                        # builder.field("id").append(str(k))
+                        builder.field("LHEReweightingWeight").append(float(v))
+                        
+                    
+            builder.field('GenParts')
+            with builder.list():
+                for particle in event.particles:
+                    with builder.record():
+                        for fname,fattr_list in genpart_field_map.items():
+                            fattr = fattr_list[0]
+                            dtype = fattr_list[1]
+                            attr = particle
+                            for subattr_str in fattr.split('.'):
+                                if(subattr_str == 'p4'):
+                                    attr = p4(particle)
+                                else:
+                                    attr = getattr(attr,subattr_str)
+                                if(callable(attr)):
+                                    attr = attr()
+                            builder.field(fname).append(dtype(attr))
     return builder.snapshot()
