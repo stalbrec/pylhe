@@ -68,14 +68,16 @@ def to_awkward_nanoaod(event_iterable):
     def p4(a):
         return LorentzVector(a.px, a.py, a.pz, a.e)
 
-    genpart_field_map = {'pt':'p4.pt','eta':'p4.eta','genPartIdxMother':'mother1','mass':'p4.mass','pdgId':'id','phi':'p4.phi','status':'status'}
-
+    genpart_field_map = {'pt':['p4.pt',float],'eta':['p4.eta',float],'genPartIdxMother':['mother1',int],'mass':['p4.mass',float],'pdgId':['id',int],'phi':['p4.phi',float],'status':['status',int]}
+    
     builder = ak.ArrayBuilder()
     for event in event_iterable:
         with builder.list():
             for particle in event.particles:
                 with builder.record():
-                    for fname,fattr in genpart_field_map.items():
+                    for fname,fattr_list in genpart_field_map.items():
+                        fattr = fattr_list[0]
+                        dtype = fattr_list[1]
                         attr = particle
                         for subattr_str in fattr.split('.'):
                             if(subattr_str == 'p4'):
@@ -84,5 +86,5 @@ def to_awkward_nanoaod(event_iterable):
                                 attr = getattr(attr,subattr_str)
                             if(callable(attr)):
                                 attr = attr()
-                        builder.field(fname).real(attr)
+                        builder.field(fname).append(dtype(attr))
     return builder.snapshot()
