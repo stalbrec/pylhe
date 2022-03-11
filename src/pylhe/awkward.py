@@ -68,7 +68,7 @@ def to_awkward_nanoaod(event_iterable):
     def p4(a):
         return LorentzVector(a.px, a.py, a.pz, a.e)
 
-    genpart_field_map = {'pt':['p4.pt',float],'eta':['p4.eta',float],'genPartIdxMother':['mother1',int],'mass':['p4.mass',float],'pdgId':['id',int],'phi':['p4.phi',float],'status':['status',int]}
+    genpart_field_map = {'pt':['p4.pt',float],'eta':['p4.eta',float],'genPartIdxMother':['mother1',int],'mass':['p4.mass',float],'pdgId':['id',int],'phi':['p4.phi',float],'status':['status',int],'parent1':['mother1',int],'parent2':['mother2',int]}
     
     builder = ak.ArrayBuilder()
     for event in event_iterable:
